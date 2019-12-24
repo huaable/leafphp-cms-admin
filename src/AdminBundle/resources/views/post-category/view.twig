@@ -1,0 +1,72 @@
+{% extends '@AdminBundle/layout.twig' %}
+{% block title %}文章分类管理{% endblock %}
+{% set leftMenuActive='PostCategory' %}
+
+{% block contentRight %}
+
+    <div class="page-title">文章分类管理</div>
+
+    <div class="content-top">
+        <ul class="top-nav">
+            <li class="active"><a href="">查看文章分类</a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="mt15">
+                    <div class="pull-right">
+                        <a class="btn btn-primary btn-sm" href="{{ url('admin/post-category/update',{'id':entity.id}) }}"><span class="glyphicon glyphicon-edit"></span> 修改</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                {# 一次性消息提示 #}
+                {% include 'message.twig' %}
+
+                <table class="table mt15">
+                    <tr>
+                        <td>{{ entity.labels().id }}</td>
+                        <td>{{ entity.id }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().name }}</td>
+                        <td>{{ entity.name }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().weight }}</td>
+                        <td>{{ entity.weight }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().status }}</td>
+                        <td>{{ entity.status }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().parent_id }}</td>
+                        <td>{{ entity.parent_id }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().created_at }}</td>
+                        <td>{{ entity.created_at }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().updated_at }}</td>
+                        <td>{{ entity.updated_at }}</td>
+                    </tr>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

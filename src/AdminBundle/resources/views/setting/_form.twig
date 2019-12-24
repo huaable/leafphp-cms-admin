@@ -1,0 +1,31 @@
+{#{{ app.html.dropDownList('Setting[status]', app.request.get('Setting').status|default(entity.status), entity.statusAlias(true), {'class':'form-control', 'prompt': '请选择'}) }}#}
+
+<input type="hidden" name="_token" value="{{ csrf_token()}}">
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-name">{{ entity.labels().name }}</label>
+    <div class="col-sm-8">
+        <input type="text" name="Setting[name]" class="form-control"
+               value="{{ app.request.get('Setting').name|default(entity.name) }}" id="input-name" >
+        <span class="help-block">{# 帮助信息 #}</span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-key">{{ entity.labels().key }}</label>
+    <div class="col-sm-8">
+        <input type="text" name="Setting[key]" class="form-control"
+               value="{{ app.request.get('Setting').key|default(entity.key) }}" id="input-key" >
+        <span class="help-block">{# 帮助信息 #}</span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-value">{{ entity.labels().value }}</label>
+    <div class="col-sm-8">
+        <textarea rows="5" type="text" name="Setting[value]" class="form-control"
+                  value="" id="input-value" >{{ app.request.get('Setting').value|default(entity.value) }}</textarea>
+        <span class="help-block">{# 帮助信息 #}</span>
+    </div>
+</div>
+

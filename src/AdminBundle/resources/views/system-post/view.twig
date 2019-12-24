@@ -1,0 +1,87 @@
+{% extends '@AdminBundle/layout.twig' %}
+{% block title %}系统文章管理{% endblock %}
+{% set leftMenuActive='SystemPost' %}
+
+{% block contentRight %}
+
+    <div class="page-title">系统文章管理</div>
+
+    <div class="content-top">
+        <ul class="top-nav">
+            <li class="active"><a href="">查看系统文章</a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="mt15">
+                    <div class="pull-right">
+                        <a class="btn btn-primary btn-sm" href="{{ url('admin/system-post/update',{'id':entity.id}) }}"><span class="glyphicon glyphicon-edit"></span> 修改</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                {# 一次性消息提示 #}
+                {% include 'message.twig' %}
+
+                <table class="table mt15">
+                    <tr>
+                        <td>{{ entity.labels().id }}</td>
+                        <td>{{ entity.id }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().lang }}</td>
+                        <td>{{ entity.lang }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().key }}</td>
+                        <td>{{ entity.key }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().filename }}</td>
+                        <td>{{ entity.filename }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().title }}</td>
+                        <td>{{ entity.title }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().summary }}</td>
+                        <td>{{ entity.summary }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().content }}</td>
+                        <td>{{ entity.content }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().view_count }}</td>
+                        <td>{{ entity.view_count }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().created_at }}</td>
+                        <td>{{ entity.created_at }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ entity.labels().updated_at }}</td>
+                        <td>{{ entity.updated_at }}</td>
+                    </tr>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

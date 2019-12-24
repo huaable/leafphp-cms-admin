@@ -1,0 +1,76 @@
+{% extends '@AdminBundle/layout.twig' %}
+{% block title %}管理{% endblock %}
+{% set leftMenuActive='Setting' %}
+
+{% block contentRight %}
+
+    <div class="page-title">管理</div>
+
+    <div class="content-top">
+        <ul class="top-nav">
+            <li class="active"><a href="">修改</a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                {# 错误提示信息 #}
+                {% if error is defined and error is not empty %}
+                <div class="ui-tips bg-info">
+                    <span class="icon glyphicon glyphicon-info-sign"></span>
+                    <span>{{ error }}</span>
+                </div>
+                {% endif %}
+
+                {# 表单 #}
+                <form class="form-horizontal mt15" action="{{ url('admin/setting/update',{'id': entity.id}) }}" method="post">
+
+                    <input type="hidden" name="returnUrl" value="{{ app.request.get('returnUrl', '')}}">
+
+                    {#{{ app.html.dropDownList('Setting[status]', app.request.get('Setting').status|default(entity.status), entity.statusAlias(true), {'class':'form-control', 'prompt': '请选择'}) }}#}
+
+                    <input type="hidden" name="_token" value="{{ csrf_token()}}">
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-name">{{ entity.labels().name }}</label>
+                        <div class="col-sm-8">
+                            <div  class="form-control-static" >{{ app.request.get('Setting').name|default(entity.name) }}</div>
+                            <span class="help-block">{# 帮助信息 #}</span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-key">{{ entity.labels().key }}</label>
+                        <div class="col-sm-8">
+                            <div  class="form-control-static" >{{ app.request.get('Setting').key|default(entity.key) }}</div>
+                            <span class="help-block">{# 帮助信息 #}</span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-value">{{ entity.labels().value }}</label>
+                        <div class="col-sm-8">
+                             <textarea rows="5" type="text" name="Setting[value]" class="form-control"
+                                       value="" id="input-value" >{{ app.request.get('Setting').value|default(entity.value) }}</textarea>
+                            <span class="help-block">{# 帮助信息 #}</span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+
+                </form>
+                <div class="mt15"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

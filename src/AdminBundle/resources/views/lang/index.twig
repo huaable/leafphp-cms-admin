@@ -1,0 +1,121 @@
+{% extends '@AdminBundle/layout.twig' %}
+{% block title %}语言站点管理{% endblock %}
+{% set leftMenuActive='Lang' %}
+
+{% block contentRight %}
+
+
+    <div class="page-title">语言站点管理</div>
+
+    <div class="content-top">
+        <ul class="top-nav">
+            <li class="active"><a href="">语言站点列表</a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="container-fluid content-main">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="mt15">
+                    <a class="btn btn-sm btn-primary pull-right" href="{{ url('admin/lang/create') }}"><span class="glyphicon glyphicon-plus"></span> 新增语言站点</a>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="ui-tips bg-info mt15">
+                    <span class="icon glyphicon glyphicon-info-sign"></span>
+                    <span>注意:您现在编辑的是 【{{  app.lang.name }}】 站点的后台数据。</span>
+                </div>
+
+                {# 一次性消息提示 #}
+                {% include 'message.twig' %}
+
+                {# 搜索表单 #}
+                {#<form action="{{ url('admin/lang') }}" method="get" class="form-inline form-search mt15">
+                    <div class="form-group">
+                        <label>{{ entity.labels().id }}</label>
+                        <input type="text" name="Lang[id]" class="form-control"
+                               value="{{ app.request.get('Lang').id|default('') }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ entity.labels().name }}</label>
+                        <input type="text" name="Lang[name]" class="form-control"
+                               value="{{ app.request.get('Lang').name|default('') }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ entity.labels().key }}</label>
+                        <input type="text" name="Lang[key]" class="form-control"
+                               value="{{ app.request.get('Lang').key|default('') }}">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> 搜索
+                    </button>
+
+                    {% if app.request.get('Lang') %}
+                        <a class="btn btn-default btn-sm" href="{{ url('admin/lang') }}">
+                            <span class="glyphicon glyphicon-repeat"></span> 清空条件</a>
+                    {% endif %}
+
+                </form>#}
+
+                {# 列表 #}
+
+                {% if dataProvider.data is empty %}
+                    <div class="alert alert-warning mt15" role="alert">暂无信息</div>
+                {% else %}
+                    <style>
+                        .table td{
+                            line-height: 40px!important;
+                        }
+                    </style>
+                    <div class="table-responsive mt15">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    {#<th  width="100">{{ sort_by('id', 'ID') }}</th>#}
+                                    <th width="100"></th>
+                                    <th width="100">{{ entity.labels().name }}</th>
+                                    <th width="100">{{ entity.labels().key }}</th>
+                                    <th>{{ entity.labels().flag }}</th>
+                                    <th width="150">操作</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for item in dataProvider.data %}
+                                <tr>
+                                    {#<td>{{ item.id }}</td>#}
+                                    <td>{{ item.key == lang?'正在编辑':'' }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.key }}</td>
+                                    <td>
+                                        {% if(item.flag) %}
+                                        <img src="{{ item.url() }}" height="40" alt=""/>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {#<a href="{{ url('admin/lang/view', {'id':item.id}) }}">详情</a>#}
+                                        <a href="{{ url('admin/lang/change', {'id':item.id, _token:csrf_token() }) }}" >切换</a>
+                                        <a href="{{ url('admin/lang/update', {'id':item.id, returnUrl:app.request.getRequestUri()}) }}">修改</a>
+                                        <a href="{{ url('admin/lang/delete', {'id':item.id, _token:csrf_token() }) }}" class="leaf-confirm" data-method="post" data-dialog-content="您确定要删除吗?">删除</a>
+                                    </td>
+                                </tr>
+                        {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                {# 分页 #}
+                <div class="pull-right">
+                    <span>共<strong> {{ dataProvider.page.itemCount }} </strong>条记录 </span>
+                    {{ dataProvider.page.createLinks(url('admin/lang')) }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

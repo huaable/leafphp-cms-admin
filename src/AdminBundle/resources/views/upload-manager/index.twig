@@ -1,0 +1,121 @@
+{% extends '@AdminBundle/layout.twig' %}
+{% block title %}文件资源管理管理{% endblock %}
+{% set leftMenuActive='UploadManager' %}
+
+{% block contentRight %}
+
+    <div class="page-title">文件资源管理管理</div>
+
+    <div class="content-top">
+        <ul class="top-nav">
+            <li class="active"><a href="">文件资源管理列表</a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="container-fluid content-main">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="mt15">
+                    {#<a class="btn btn-sm btn-primary pull-right" href="{{ url('admin/upload-manager/create') }}"><span class="glyphicon glyphicon-plus"></span> 新增文件资源管理</a>#}
+                    <a class="btn btn-sm btn-primary pull-right leaf-confirm"
+                       href="{{ url('admin/upload-manager/delete-all', { _token:csrf_token() }) }}"
+                       data-method="post"><span class="glyphicon glyphicon-plus"></span> 一键清理</a>
+                    <div class="clearfix"></div>
+                </div>
+
+                {# 一次性消息提示 #}
+                {% include 'message.twig' %}
+
+                {# 搜索表单 #}
+                {#<form action="{{ url('admin/upload-manager') }}" method="get" class="form-inline form-search mt15">
+                    <div class="form-group">
+                        <label>{{ entity.labels().id }}</label>
+                        <input type="text" name="UploadManager[id]" class="form-control"
+                               value="{{ app.request.get('UploadManager').id|default('') }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ entity.labels().model }}</label>
+                        <input type="text" name="UploadManager[model]" class="form-control"
+                               value="{{ app.request.get('UploadManager').model|default('') }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ entity.labels().model_id }}</label>
+                        <input type="text" name="UploadManager[model_id]" class="form-control"
+                               value="{{ app.request.get('UploadManager').model_id|default('') }}">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> 搜索
+                    </button>
+
+                    {% if app.request.get('UploadManager') %}
+                        <a class="btn btn-default btn-sm" href="{{ url('admin/upload-manager') }}">
+                            <span class="glyphicon glyphicon-repeat"></span> 清空条件</a>
+                    {% endif %}
+
+                </form>#}
+
+                {# 列表 #}
+                {% if dataProvider.data is empty %}
+                    <div class="alert alert-warning mt15" role="alert">暂无信息</div>
+                {% else %}
+                    <style>
+                        .table td {
+                            line-height: 40px !important;
+                        }
+                    </style>
+                    <div class="table-responsive mt15">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                {#<th width="100">{{ sort_by('id', 'ID') }}</th>#}
+                                <th width="100">{{ entity.labels().model }}</th>
+                                <th width="100">类型</th>
+                                <th>{{ entity.labels().filename }}</th>
+                                <th width="100">{{ entity.labels().status }}</th>
+                                <th width="150">操作</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for item in dataProvider.data %}
+                                <tr>
+                                    {#<td>{{ item.id }}</td>#}
+                                    <td>{{ item.model }}</td>
+                                    <td>{{ item.showDesc() }}</td>
+                                    <td>
+                                        <img height="40" src="{{ item.filenameUrl() }}" alt="{{ item.filename }}"/>
+                                    </td>
+                                    <td>{{ item.statusAlias() }}</td>
+                                    <td>
+
+                                        {#<a href="{{ url('admin/upload-manager/view', {'id':item.id}) }}">详情</a>#}
+                                        {#<a href="{{ url('admin/upload-manager/update', {'id':item.id, returnUrl:app.request.getRequestUri()}) }}">修改</a>#}
+                                        {% if item.status == 20 %}
+                                            <a href="{{ url('admin/upload-manager/delete', {'id':item.id, _token:csrf_token() }) }}"
+                                               class="leaf-confirm" data-method="post"
+                                               data-dialog-content="您确定要删除吗?">删除</a>
+                                        {% endif %}
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                {# 分页 #}
+                <div class="pull-right">
+                    <span>共<strong> {{ dataProvider.page.itemCount }} </strong>条记录 </span>
+                    {{ dataProvider.page.createLinks(url('admin/upload-manager')) }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

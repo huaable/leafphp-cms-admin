@@ -1,0 +1,7 @@
+Thumbs.db
+.DS_Store
+.sass-cache
+.idea
+vender
+web/uploads
+web/temp

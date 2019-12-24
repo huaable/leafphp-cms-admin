@@ -1,0 +1,27 @@
+{
+    "name": "pfinal/leafphp",
+    "require": {
+        "pfinal/leaf": "*",
+        "pfinal/cache": "*",
+        "cebe/markdown": "~1.0",
+        "league/flysystem": "~1.0",
+        "swiftmailer/swiftmailer":"5.*",
+        "myclabs/php-enum":"*",
+        "twig/twig": "1.*",
+        "pfinal/queue": "*",
+        "nesbot/carbon": "~1.0",
+        "robmorgan/phinx": "0.9.*",
+        "phpmyadmin/sql-parser": "^4.3",
+        "symfony/var-dumper": "*",
+        "symfony/event-dispatcher": "2.*|3.*",
+        "vlucas/phpdotenv": "3.*",
+        "pfinal/storage": "^1.2",
+        "workerman/workerman": "^3.5"
+    },
+    "require-dev": {},
+    "autoload": {
+        "psr-4": {
+          "": ["src\\"]
+        }
+    }
+}

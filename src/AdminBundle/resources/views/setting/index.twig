@@ -1,0 +1,103 @@
+{% extends '@AdminBundle/layout.twig' %}
+{% block title %}网站设置管理{% endblock %}
+{% set leftMenuActive='Setting' %}
+
+{% block contentRight %}
+
+    <div class="page-title">网站设置管理</div>
+
+    <div class="content-top">
+        <ul class="top-nav">
+            <li class="active"><a href="">列表</a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="container-fluid content-main">
+        <div class="row">
+            <div class="col-md-12">
+
+                {#<div class="mt15">#}
+                    {#<a class="btn btn-sm btn-primary pull-right" href="{{ url('admin/setting/create') }}"><span class="glyphicon glyphicon-plus"></span> 新增</a>#}
+                    {#<div class="clearfix"></div>#}
+                {#</div>#}
+
+                {# 一次性消息提示 #}
+                {% include 'message.twig' %}
+
+                {# 搜索表单 #}
+                {#<form action="{{ url('admin/setting') }}" method="get" class="form-inline form-search mt15">#}
+                    {#<div class="form-group">#}
+                        {#<label>Id</label>#}
+                        {#<input type="text" name="Setting[id]" class="form-control"#}
+                               {#value="{{ app.request.get('Setting').id|default('') }}">#}
+                    {#</div>#}
+
+                    {#<div class="form-group">#}
+                        {#<label>名称</label>#}
+                        {#<input type="text" name="Setting[name]" class="form-control"#}
+                               {#value="{{ app.request.get('Setting').name|default('') }}">#}
+                    {#</div>#}
+
+                    {#<div class="form-group">#}
+                        {#<label>健</label>#}
+                        {#<input type="text" name="Setting[key]" class="form-control"#}
+                               {#value="{{ app.request.get('Setting').key|default('') }}">#}
+                    {#</div>#}
+
+                    {#<button type="submit" class="btn btn-primary btn-sm">#}
+                        {#<span class="glyphicon glyphicon-search"></span> 搜索#}
+                    {#</button>#}
+
+                    {#{% if app.request.get('Setting') %}#}
+                        {#<a class="btn btn-default btn-sm" href="{{ url('admin/setting') }}">#}
+                            {#<span class="glyphicon glyphicon-repeat"></span> 清空条件</a>#}
+                    {#{% endif %}#}
+
+                {#</form>#}
+
+                {# 列表 #}
+                {% if dataProvider.data is empty %}
+                    <div class="alert alert-warning mt15" role="alert">暂无信息</div>
+                {% else %}
+                    <div class="table-responsive mt15">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    {#<th width="100">{{ sort_by('id', 'ID') }}</th>#}
+                                    <th width="100">{{ entity.labels().name }}</th>
+                                    <th width="100">{{ entity.labels().key }}</th>
+                                    <th>{{ entity.labels().value }}</th>
+                                    <th width="150">操作</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for item in dataProvider.data %}
+                                <tr>
+                                    {#<td>{{ item.id }}</td>#}
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.key }}</td>
+                                    <td>{{ item.value }}</td>
+                                    <td>
+                                        {#<a href="{{ url('admin/setting/view', {'id':item.id}) }}">详情</a>#}
+                                        <a href="{{ url('admin/setting/update', {'id':item.id, returnUrl:app.request.getRequestUri()}) }}">修改</a>
+                                        {#<a href="{{ url('admin/setting/delete', {'id':item.id, _token:csrf_token() }) }}" class="leaf-confirm" data-method="post" data-dialog-content="您确定要删除吗?">删除</a>#}
+                                    </td>
+                                </tr>
+                        {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                {# 分页 #}
+                <div class="pull-right">
+                    <span>共<strong> {{ dataProvider.page.itemCount }} </strong>条记录 </span>
+                    {{ dataProvider.page.createLinks(url('admin/setting')) }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

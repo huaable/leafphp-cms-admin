@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Admin{% endblock %}</title>
+
+    <link href="{{ asset('static/admin/css/layout.css') }}" rel="stylesheet">
+    <link href="{{ asset('static/leaf/css/leaf.css') }}" rel="stylesheet">
+    <link href="{{ asset('static/art-dialog/css/ui-dialog.css') }}" rel="stylesheet">
+    <style>
+        html, body {
+            background-color: #fff;
+            height: 100%;
+        }
+
+        a,
+        a:hover,
+        a:visited,
+        a:focus {
+            color: #4D6AEB;
+        }
+
+        .layout-header {
+            background-color: #4D6AEB;
+            border: 0;
+            color: #fafafa;
+            box-shadow: 0 1px 8px 0px rgba(0, 0, 0, .2);
+            z-index: 1001;
+            position: relative;
+
+        }
+
+        .layout-header .logo {
+            color: inherit;
+        }
+
+        .layout-header a {
+            color: inherit;
+
+        }
+
+        .layout-header .logo span {
+            display: inline-block;
+            vertical-align: middle
+        }
+
+        .display-table {
+            width: 100%;
+            display: flex;
+            -webkit-display: flex;
+            -ms-display: flex;
+            -o-display: flex;
+            padding: 0;
+            background-color: #FBF7FA;
+            height: calc(100% - 62px);
+        }
+
+        .layout-menu {
+            background-color: #3d3d3d;
+        }
+
+        .layout-menu .main-menu span.menu-item {
+            color: #ccc;
+            font-weight: 500;
+            background-color: rgba(0, 0, 0, .1);
+            position: relative;
+            border-left: 4px solid #2B2B2B;
+        }
+
+        .layout-menu .main-menu .menu-item .icon {
+            color: inherit;
+        }
+
+        .layout-menu .main-menu .menu-item .icon,
+        .layout-menu .main-menu .menu-item span {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .layout-menu .main-menu a {
+            color: #aaa;
+            font-weight: 400;
+
+        }
+
+        .layout-menu .main-menu a.active span {
+            border-left: 0px solid #4d6aeb;
+            color: #fff;
+            position: relative;
+        }
+        .layout-menu .main-menu a.active span:before {
+            position: absolute;
+            content: '';
+            left: -10px;
+            top: 50%;
+            margin-top: -2px;
+            width: 4px;
+            height: 4px;
+            background-color: #FFF;
+        }
+
+        .layout-menu .main-menu a:hover {
+            background-color: transparent;
+            color: #fff;
+        }
+
+        .account-info .icon,
+        .account-info span {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1;
+            top: 0;
+
+        }
+
+        .layout-header .account-info > a {
+            padding: 0 10px;
+            margin: 0;
+        }
+
+        .layout-header .login-out {
+            border-left: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        .layout-content {
+            border-left: 0;
+            vertical-align: top;
+            padding: 15px;
+            background-color: #fafafa;
+            height: 100%;
+            overflow: scroll;
+
+        }
+
+        .layout-content .layout-inner {
+            background-color: #FFF;
+        }
+
+        .layout-content .top-nav li.active a, .layout-content .top-nav li.active span, .layout-content .top-nav li.active a:hover {
+            border-bottom-color: #4D6AEB;
+        }
+
+        .layout-footer {
+            display: none;
+            color: #888;
+            background-color: #fff;
+        }
+
+        a.btn-primary {
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: #4D6AEB;
+            border-color: #4D6AEB;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn-primary:visited {
+            background-color: #4D6AEB;
+            border-color: #4D6AEB;
+        }
+
+        .btn-primary:active:hover, .btn-primary:active:focus, .btn-primary:active.focus, .btn-primary.active:hover, .btn-primary.active:focus, .btn-primary.active.focus, .open > .btn-primary.dropdown-toggle:hover, .open > .btn-primary.dropdown-toggle:focus, .open > .btn-primary.dropdown-toggle.focus {
+            color: #fff;
+            background-color: #4D6AEB;
+            border-color: #4D6AEB;
+        }
+    </style>
+    {% block css %}
+    {% endblock %}
+
+</head>
+<body>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+{# jQuery-File-Upload 插件 要求jquery 先加载#}
+<script src="{{ asset('static/jquery/jquery.min.js') }}"></script>
+
+{% block body %}
+
+    {% block header %}
+        <nav class="layout-header">
+            <div class="container-fluid ">
+                {#<div class="container layout-width">#}
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="pull-left">
+                            <a href="{{ url('/admin') }}" class="logo">
+                                <span class="glyphicon glyphicon-dashboard"></span> <span>管理后台</span>
+                            </a>
+                        </div>
+
+                        <div class="pull-right">
+
+                            <span class="account-info">
+                                {#<a class="" href="{{ url('/') }}"><span>前台</span></a>#}
+                                <a class="" href="{{ url('/admin/lang') }}"><span>正在编辑：{{ app.lang.name }}</span></a>
+                                {#<span>{{ app.admin.email }}</span>#}
+                                <a class="login-out" href="{{ url('admin/logout') }}">
+                                    <span>退出</span>
+                                    <i class="icon glyphicon glyphicon-off"></i>
+                                </a>
+                            </span>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+    {% endblock %}
+
+    {% block content %}
+        <section class=" display-table">
+
+            <!--左菜单区域-->
+            <div class="layout-menu">
+                {% block contentLeft %}
+                    <ul class="main-menu">
+                        <li>
+                            <span class="menu-item">
+                                <i class="icon glyphicon glyphicon-cog"></i>
+                                <i class="icon pull-right"></i>
+                                <span>网站设置</span>
+                            </span>
+                        </li>
+
+
+
+                        <li class="level-2">
+                            <a class="menu-item {{ app.controller == 'admin/setting'?'active':'' }}" href="{{ url('admin/setting') }}">
+                                <i class="icon"></i>
+                                {#<i class="icon pull-right"><span class="badge">8</span></i>#}
+                                <span>基本信息</span>
+                            </a>
+                        </li>
+
+
+
+                        <li class="level-2">
+                            <a class="menu-item {{ app.controller == 'admin/system-post'?'active':'' }}" href="{{ url('admin/system-post') }}">
+                                <i class="icon"></i>
+                                {#<i class="icon pull-right"><span class="badge">8</span></i>#}
+                                <span>系统文章</span>
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <span class="menu-item">
+                                <i class="icon glyphicon glyphicon-list-alt"></i>
+                                <i class="icon pull-right"></i>
+                                <span>文章管理</span>
+                            </span>
+                        </li>
+
+                        <li class="level-2">
+
+                            <a class="menu-item {{ app.controller == 'admin/post-category'?'active':'' }}" href="{{ url('admin/post-category') }}">
+                                <i class="icon"></i>
+                                {#<i class="icon pull-right"><span class="badge">8</span></i>#}
+                                <span>文章分类</span>
+                            </a>
+                            <a class="menu-item {{ app.controller == 'admin/post'?'active':'' }}" href="{{ url('admin/post') }}">
+                                <i class="icon"></i>
+                                {#<i class="icon pull-right"><span class="badge">8</span></i>#}
+                                <span>文章列表</span>
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <span class="menu-item">
+                                <i class="icon glyphicon glyphicon-th-large"></i>
+                                <i class="icon pull-right"></i>
+                                <span>产品管理</span>
+                            </span>
+                        </li>
+
+                        <li class="level-2">
+
+                            <a class="menu-item {{ app.controller == 'admin/product-category'?'active':'' }}" href="{{ url('admin/product-category') }}">
+                                <i class="icon"></i>
+                                {#<i class="icon pull-right"><span class="badge">8</span></i>#}
+                                <span>产品分类</span>
+                            </a>
+                            <a class="menu-item {{ app.controller == 'admin/product'?'active':'' }}" href="{{ url('admin/product') }}">
+                                <i class="icon"></i>
+                                {#<i class="icon pull-right"><span class="badge">8</span></i>#}
+                                <span>产品列表</span>
+                            </a>
+
+                            <a class="menu-item {{ app.controller == 'admin/product-banner'?'active':'' }}" href="{{ url('admin/product-banner') }}">
+                                <i class="icon"></i>
+                                {#<i class="icon pull-right"><span class="badge">8</span></i>#}
+                                <span>横幅广告</span>
+                            </a>
+
+
+                        </li>
+                        <li>
+                            <span class="menu-item">
+                                <i class="icon glyphicon glyphicon-th-large"></i>
+                                <i class="icon pull-right"></i>
+                                <span>资源管理</span>
+                            </span>
+                        </li>
+
+                        <li class="level-2">
+
+                            <a class="menu-item {{ app.controller == 'admin/upload-manager'?'active':'' }}" href="{{ url('admin/upload-manager') }}">
+                                <i class="icon"></i>
+                                {#<i class="icon pull-right"><span class="badge">8</span></i>#}
+                                <span>清理文件</span>
+                            </a>
+
+
+                        </li>
+
+
+                    </ul>
+                {% endblock %}
+            </div>
+            <!-- 左菜单区域结束-->
+
+            <!--右内容区域-->
+            <div class="layout-content">
+                <div class="layout-inner">
+                    {% block contentRight %}{% endblock %}
+                </div>
+            </div>
+            <!--右内容区域结束-->
+
+            <div class="clearfix"></div>
+        </section>
+    {% endblock %}
+
+    {% block footer %}
+        <footer class="layout-footer">
+            <div class="container layout-width">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="links">
+                            <li><p class="copyright">Copyright © 2016 - {{ "now"|date('Y') }} All Rights Reserved.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    {% endblock %}
+
+{% endblock %}
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="{{ asset('static/ie8/html5shiv.min.js') }}"></script>
+<script src="{{ asset('static/ie8/respond.min.js') }}"></script>
+<![endif]-->
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="{{ asset('static/admin/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('static/art-dialog/dist/dialog-min.js') }}"></script>
+<script src="{{ asset('static/leaf/leaf.js') }}"></script>
+
+{% block js %}
+{% endblock %}
+
+</body>
+</html>

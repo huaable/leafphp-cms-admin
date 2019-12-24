@@ -1,0 +1,130 @@
+{% extends '@AdminBundle/layout.twig' %}
+{% block title %}产品管理{% endblock %}
+{% set leftMenuActive='Product' %}
+
+{% block contentRight %}
+
+    <div class="page-title">产品管理</div>
+
+    <div class="content-top">
+        <ul class="top-nav">
+            <li class="active"><a href="">产品列表</a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="container-fluid content-main">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="mt15">
+                    <a class="btn btn-sm btn-primary pull-right" href="{{ url('admin/product/create') }}"><span
+                                class="glyphicon glyphicon-plus"></span> 新增产品</a>
+                    <div class="clearfix"></div>
+                </div>
+
+                {# 一次性消息提示 #}
+                {% include 'message.twig' %}
+
+                {# 搜索表单 #}
+                <form action="{{ url('admin/product') }}" method="get" class="form-inline form-search mt15">
+                    {#<div class="form-group">#}
+                    {#<label>{{ entity.labels().id }}</label>#}
+                    {#<input type="text" name="Product[id]" class="form-control"#}
+                    {#value="{{ app.request.get('Product').id|default('') }}">#}
+                    {#</div>#}
+
+                    <div class="form-group">
+                        <label>{{ entity.labels().category_id }}</label>
+
+                        <select name="Product[category_id]" class="form-control" id="input-category_id">
+                            <option value="">请选择</option>
+                            {% for item in categoryList %}
+                                <option value="{{ item.id }}" {{ app.request.get('Product').category_id|default('') == item.id?'selected':'' }}>
+
+                                    {% if(item.level > 1) %}
+                                        {% for i in 1..item.level %}
+                                            &nbsp;&nbsp;
+                                        {% endfor %}
+                                    {% endif %}
+                                    {{ item.name }}
+
+                                </option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>{{ entity.labels().title }}</label>
+                        <input type="text" name="Product[name]" class="form-control" style="width: 200px"
+                               value="{{ app.request.get('Product').id|default('') }}">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> 搜索
+                    </button>
+
+                    {% if app.request.get('Product') %}
+                        <a class="btn btn-default btn-sm" href="{{ url('admin/product') }}">
+                            <span class="glyphicon glyphicon-repeat"></span> 清空条件</a>
+                    {% endif %}
+
+                </form>
+
+                {# 列表 #}
+                {% if dataProvider.data is empty %}
+                    <div class="alert alert-warning mt15" role="alert">暂无信息</div>
+                {% else %}
+                    <div class="table-responsive mt15">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th width="100">{{ entity.labels().id }}</th>
+                                <th width="150">{{ entity.labels().category_id }}</th>
+                                <th width="50">{{ entity.labels().status }}</th>
+                                <th width="50">{{ entity.labels().recommend }}</th>
+                                <th>{{ entity.labels().title }}</th>
+                                <th width="150">{{ entity.labels().filename }}</th>
+                                <th width="150">{{ entity.labels().updated_at }}</th>
+                                <th width="150">操作</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for item in dataProvider.data %}
+                                <tr>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.showCategory() }}</td>
+                                    <td>{{ item.statusAlias() }}</td>
+                                    <td>{{ item.recommendAlias() }}</td>
+                                    <td>{{ item.title }}</td>
+                                    <td>{% if item.filename %}
+                                            <img src="{{ item.faceUrl() }}" height="50" alt=""/>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ item.updated_at }}</td>
+                                    <td>
+                                        {#<a href="{{ url('admin/product/view', {'id':item.id}) }}">详情</a>#}
+                                        <a href="{{ url('admin/product/update', {'id':item.id, returnUrl:app.request.getRequestUri()}) }}">修改</a>
+                                        <a href="{{ url('admin/product/delete', {'id':item.id, _token:csrf_token() }) }}"
+                                           class="leaf-confirm" data-method="post" data-dialog-content="您确定要删除吗?">删除</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                {# 分页 #}
+                <div class="pull-right">
+                    <span>共<strong> {{ dataProvider.page.itemCount }} </strong>条记录 </span>
+                    {{ dataProvider.page.createLinks(url('admin/product')) }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

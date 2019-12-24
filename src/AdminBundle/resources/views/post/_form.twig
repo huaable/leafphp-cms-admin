@@ -1,0 +1,238 @@
+{#{{ app.html.dropDownList('Post[status]', app.request.get('Post').status|default(entity.status), entity.statusAlias(true), {'class':'form-control', 'prompt': '请选择'}) }}#}
+
+<input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-category_id">{{ entity.labels().category_id }}</label>
+    <div class="col-sm-8">
+
+        <select name="Post[category_id]" class="form-control" id="input-category_id">
+            <option value="0">请选择</option>
+            {% for item in categoryList %}
+                <option value="{{ item.id }}" {{ app.request.get('Post').category_id|default(entity.category_id) == item.id?'selected':'' }}>
+
+                    {% if(item.level > 1) %}
+                        {% for i in 1..item.level %}
+                            &nbsp;&nbsp;
+                        {% endfor %}
+                    {% endif %}
+                    {{ item.name }}
+
+                </option>
+            {% endfor %}
+
+        </select>
+
+        <span class="help-block">{# 帮助信息 #}</span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-status">{{ entity.labels().status }}</label>
+    <div class="col-sm-8">
+        {{ app.html.dropDownList('Post[status]', app.request.get('Post').status|default(entity.status), entity.statusAlias(true), {'class':'form-control', }) }}
+        <span class="help-block">{# 帮助信息 #}</span>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-recommend">{{ entity.labels().recommend }}</label>
+    <div class="col-sm-8">
+        {{ app.html.dropDownList('Post[recommend]', app.request.get('Post').recommend|default(entity.recommend), entity.recommendAlias(true), {'class':'form-control', }) }}
+        <span class="help-block">{# 帮助信息 #}</span>
+    </div>
+</div>
+
+
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-image">{{ entity.labels().filename }}</label>
+    <div class="col-sm-8">
+        <style>
+            .img-item {
+                display: inline-block;
+                position: relative;
+            }
+
+            .img-item img {
+                height: 200px;
+            }
+
+            .js-remove {
+                position: absolute;
+                top: -8px;
+                right: -2px;
+                cursor: pointer;
+                color: red;
+            }
+        </style>
+
+        <div class="show-images">
+            {% if images is defined and images is not empty %}
+                {% for image in images %}
+                    <div class="img-item">
+                        <img src="{{ image.url() }}" data-image-id="{{ image.id }}">
+                        <input type="hidden" name="imageIds[]" value="{{ image.id }}">
+                        <span class="js-remove glyphicon glyphicon-minus-sign"></span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- jquery-file-upload 作为目标文件上传插件的文件输入域 -->
+        <div class="btn btn-primary btn-sm fileinput-button" style="margin-top: 10px;">
+            <span>上传...</span><!--选择文件...-->
+            <input class="fileupload" type="file" data-show=".show-images" name="file[]" multiple>
+        </div>
+
+        <!-- 进度条 -->
+        <div class="progress progress-striped active js-img-progress" data-show=".js-product-image-show"
+             style="display: none;">
+            <div class="progress-bar progress-bar-info"></div>
+        </div>
+
+        <span class="help-block"></span>
+    </div>
+</div>
+<link rel="stylesheet" href="{{ asset('static/jquery-file-upload/css/jquery.fileupload.css') }}">
+<script src="{{ asset('static/jquery-file-upload/js/vendor/jquery.ui.widget.js') }}"></script>
+<script src="{{ asset('static/jquery-file-upload/js/jquery.iframe-transport.js') }}"></script>
+<script src="{{ asset('static/jquery-file-upload/js/jquery.fileupload.js') }}"></script>
+<script>
+	$(function () {
+		'use strict';
+
+		var url = '{{ url('admin/post/upload') }}';
+
+		$('.fileupload').fileupload({
+			url: url,
+			dataType: 'json',
+			done: function (e, data) {
+
+				if (data.result.status == false) {
+					leaf.alert(data.result.message)
+					return;
+				}
+
+				$(".file-upload-progress").hide(); //隐藏进度条
+				//e.target 当前点击的按扭
+				var showDiv = $(e.target).attr("data-show");
+				showImage(data.result.file, showDiv)
+			},
+			progressall: function (e, data) {
+				$('.file-upload-progress').show();
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				$('.file-upload-progress .progress-bar').css('width', progress + '%');
+			}
+		});
+
+		function showImage(file, showDiv) {
+			var imgItem = $("<div class='img-item'></div>");
+
+			// var tempUrl = file.url; //预览临时图片
+			var tempUrl = file.url; //预览临时图片
+
+			//如果是多图就不需要这句
+			$(showDiv).html('');
+
+			$('<img>').attr('src', tempUrl).appendTo(imgItem);
+			//ajax返回的数据中会有一个fileKey，放入js创建的隐藏input中，传到控制器，用于把文件从临时目录移动到正式目录
+			$('<input type="hidden" name="fileKey[]">').val(file.fileKey).appendTo(imgItem);
+
+			//删除按扭
+			$("<span class='js-remove glyphicon glyphicon-minus-sign'></span>").appendTo(imgItem)
+			imgItem.appendTo(showDiv);
+		}
+
+		//删除图片
+		$(document).on('click', '.js-remove', function () {
+			$(this).parents('.img-item').remove();
+		})
+	});
+</script>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-author">{{ entity.labels().author }}</label>
+    <div class="col-sm-8">
+        <input type="text" name="Post[author]" class="form-control"
+               value="{{ app.request.get('Post').author|default(entity.author) }}" id="input-author">
+        <span class="help-block">{# 帮助信息 #}</span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-title">{{ entity.labels().title }}</label>
+    <div class="col-sm-8">
+        <input type="text" name="Post[title]" class="form-control"
+               value="{{ app.request.get('Post').title|default(entity.title) }}" id="input-title">
+        <span class="help-block">{# 帮助信息 #}</span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-summary">{{ entity.labels().summary }}</label>
+    <div class="col-sm-8">
+        <textarea id="input-summary" name="Post[summary]" class="form-control" cols="30" rows="4">{{ app.request.get('Post').summary|default(entity.summary) }}</textarea>
+        <span class="help-block">{# 帮助信息 #}</span>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-content">{{ entity.labels().content }}</label>
+    <div class="col-sm-8">
+        <textarea hidden cols="30" rows="5" name="Post[content]" class=""
+                  id="input-content">{{ app.request.get('Post').content|default(entity.content) }}</textarea>
+
+        <script type="text/plain" id="myEditor">{% autoescape false %}{{ app.request.get('Post').content|default(entity.content) }}{% endautoescape %}</script>
+        <span class="help-block">{# 帮助信息 #}</span>
+    </div>
+</div>
+<style>
+    #myEditor {
+        width: 100%;
+        min-height: 500px;
+    }
+
+    #myEditor img {
+        max-width: 100%;
+    }
+</style>
+
+<link href="{{ asset('static/umeditor/themes/default/css/umeditor.css') }}" rel="stylesheet">
+<script type="text/javascript" charset="utf-8" src="{{ asset('static/umeditor/umeditor.config.js') }}"></script>
+<script type="text/javascript" charset="utf-8" src="{{ asset('static/umeditor/umeditor.min.js') }}"></script>
+<script type="text/javascript" charset="utf-8" src="{{ asset('static/umeditor/lang/zh-cn/zh-cn.js') }}"></script>
+
+<script>
+
+	//实例化编辑器
+	var um = UM.getEditor('myEditor', {
+		imageUrl: "{{ url('admin/post/um-upload',{'_token':csrf_token()}) }}"             //图片上传提交地址
+		, imagePath: ""                     //图片修正地址，引用了fixedImagePath,如有特殊需求，可自行配置
+		, imageFieldName: "upfile"                   //图片数据的key,若此处修改，需要在后台对应文件修改对应参数
+
+		//工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
+		, toolbar: [
+			'source | undo redo | bold italic underline strikethrough | superscript subscript | forecolor backcolor | removeformat |',
+			'insertorderedlist insertunorderedlist | selectall cleardoc paragraph | fontfamily fontsize',
+			'| justifyleft justifycenter justifyright justifyjustify |',
+			'link unlink | emotion image video  | map',
+			'| horizontal print preview fullscreen', 'drafts', 'formula'
+		]
+	});
+
+	um.addListener('contentchange', function () {
+		var content = UM.getEditor('myEditor').getContent();
+		$("#input-content").val(content);
+		console.log("contentchange")
+	});
+
+	//剪切操作不会触发 contentchange，监听 blur 事件作为补充
+	um.addListener('blur', function () {
+		var content = UM.getEditor('myEditor').getContent();
+		$("#input-content").val(content);
+		console.log("contentchange")
+	});
+</script>

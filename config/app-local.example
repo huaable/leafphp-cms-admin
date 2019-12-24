@@ -1,0 +1,11 @@
+<?php
+
+$app['debug'] = true;
+$app['env'] = 'dev';
+$app['route.cache'] = false;
+
+$app['db.config'] = array_replace_recursive($app['db.config'], [
+    //'database' => 'test',
+    'username' => 'root',
+    'password' => '',
+]);
